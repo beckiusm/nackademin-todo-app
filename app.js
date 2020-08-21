@@ -1,27 +1,38 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-
+const request = require('request');
+const path = require('path');
 const port = 3000;
 
-//run server
+// run server
 app.listen(port, () => console.log(`Running app on port ${port}`));
 
-//db
-const Datastore = require('nedb-promise'), db = new Datastore(({ filename: './database.db', autoload: true }));
+// db
+const Datastore = require('nedb-promise'); const db = new Datastore(({ filename: './database.db', autoload: true }));
 exports.db = db;
 
-//serve static files
-app.use("/", express.static('public'));
+// serve static files
+app.use('/', express.static('public'));
 
-//body-parser
+// body-parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//router
+// router
 const router = require('./routes/router');
 app.use('/api', router);
 
-app.get("/", (req, res) => {
-    res.sendFile('index.html', {root: __dirname});
+// view engine
+app.set('views', path.join(__dirname, '/views'));
+app.set('view engine', 'ejs');
+
+app.get('/', (req, res) => {
+	request('http://localhost:3000/api/getItems', (err, response, body) => {
+		console.log(body);
+		res.render('index', {
+			data: JSON.parse(body)
+		});
+	});
+	
 });
