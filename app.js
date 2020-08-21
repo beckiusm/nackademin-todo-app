@@ -12,7 +12,7 @@ const Datastore = require('nedb-promise'), db = new Datastore(({ filename: './da
 exports.db = db;
 
 //serve static files
-app.use(express.static('public'));
+app.use("/", express.static('public'));
 
 //body-parser
 app.use(bodyParser.json());
@@ -21,3 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //router
 const router = require('./routes/router');
 app.use('/api', router);
+
+app.get("/", (req, res) => {
+    res.sendFile('index.html', {root: __dirname});
+});
