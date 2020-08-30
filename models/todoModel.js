@@ -28,6 +28,7 @@ module.exports = {
 	},
 
 	updateItem: (id, title, done, date) => {
+		console.log(title);
 		return new Promise(async (resolve, reject) => {
 			try {
 				const doc = await db.update(

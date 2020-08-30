@@ -39,11 +39,16 @@ exports.updateItem = async (req, res) => {
 };
 
 exports.deleteItem = async (req, res) => {
-	const id = req.params.id;
-	try {
-		const item = await todoModel.deleteItem(id);
-		res.json({ message: `Delete ${item} posts with id ${id}.` });
-	} catch (error) {
-		res.json({ error: error.message });
+	if (req.user.role === 'admin') {
+		const id = req.params.id;
+		try {
+			const item = await todoModel.deleteItem(id);
+			res.json({ message: `Delete ${item} posts with id ${id}.` });
+		} catch (error) {
+			res.json({ error: error.message });
+		}
+	} else {
+		res.sendStatus(401);
 	}
 };
+

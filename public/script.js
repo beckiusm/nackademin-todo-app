@@ -9,3 +9,23 @@ function test() {
 }
 
 test();
+
+// delete button
+
+$('.delete').on('click', (e) => {
+	let id = e.target.parentNode.id;
+	fetch(`./api/deleteItem/${id}`, {
+		method: 'DELETE'
+	}).then(() => {
+		$(`#${id}`).remove();
+	});
+});
+
+// $('.delete').on('click', (e) => {
+// 	let id = e.target.parentNode.id;
+// 	fetch(`./api/deleteItem/${id}`, {
+// 		method: 'POST'
+// 	}).then(() => {
+// 		$('#todoList').append();
+// 	});
+// });

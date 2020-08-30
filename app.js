@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const request = require('request');
 const path = require('path');
 const port = 3000;
+const moment = require('moment');
 
 // run server
 app.listen(port, () => console.log(`Running app on port ${port}`));
@@ -29,9 +30,9 @@ app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
 	request('http://localhost:3000/api/getItems', (err, response, body) => {
-		console.log(body);
 		res.render('index', {
-			data: JSON.parse(body)
+			data: JSON.parse(body),
+			moment: moment
 		});
 	});
 	
