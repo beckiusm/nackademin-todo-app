@@ -6,22 +6,18 @@ const db = require('../app').db;
 
 exports.createUser = async (req, res) => {
 	const { username, password } = req.body;
-	const existingUser = await db.users.find({username});
-	if (existingUser.length === 0) {
-		if (req.user.role === 'admin') {
-			bcrypt.hash(password, 10, async (error, hashedPassword) => {
-				try {
-					await userModel.createUser(username, hashedPassword);
-					res.json('Created user succesfully').status(200);
-				} catch (error) {
-					res.json({ error: error.message });
-				}
-			});
-		} res.sendStatus(401);
+	if (req.user.role === 'admin') {
+		bcrypt.hash(password, 10, async (error, hashedPassword) => {
+			try {
+				await userModel.createUser(username, hashedPassword);
+				res.json('Created user succesfully').status(200);
+			} catch (error) {
+				res.json({ error: error.message });
+			}
+		});
 	} else {
-		res.json({error: 'username already exists'});
+		res.sendStatus(401);
 	}
-
 };
 
 exports.loginUser = async (req, res) => {
