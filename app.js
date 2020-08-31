@@ -10,7 +10,11 @@ const moment = require('moment');
 app.listen(port, () => console.log(`Running app on port ${port}`));
 
 // db
-const Datastore = require('nedb-promise'); const db = new Datastore(({ filename: './database.db', autoload: true }));
+const Datastore = require('nedb-promise');
+const db = {};
+db.items = new Datastore({ filename: './database/items.db', autoload: true }); 
+db.users = new Datastore({ filename: './database/users.db', autoload: true });
+
 exports.db = db;
 
 // serve static files

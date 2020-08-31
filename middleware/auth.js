@@ -9,10 +9,8 @@ function auth (req, res, next) {
 	try {
 		const payload = jwt.verify(token, secret);
 		req.user = payload;
-		console.log(req.user);
 		next();
 	} catch (error) {
-		console.log(error);
 		res.sendStatus(401);
 	}
 }

@@ -6,16 +6,19 @@ const auth = require('../middleware/auth.js');
 
 // api
 // get todo items
-router.get('/getItems', auth.auth, todoController.getItems);
+router.get('/', auth.auth, todoController.getItems);
+
+// get one item
+router.get('/:id', auth.auth, todoController.getItem);
 
 // create todo item
-router.post('/createItem', auth.auth, todoController.createItem);
+router.post('/', auth.auth, todoController.createItem);
 
 // update todo item
-router.patch('/updateItem/:id', auth.auth, todoController.updateItem);
+router.patch('/:id', auth.auth, todoController.updateItem);
 
 // delete todo item
-router.delete('/deleteItem/:id', auth.auth, todoController.deleteItem);
+router.delete('/:id', auth.auth, todoController.deleteItem);
 
 // auth
 // create user

@@ -6,7 +6,7 @@ const db = require('../app').db;
 
 exports.createUser = async (req, res) => {
 	const { username, password } = req.body;
-	const existingUser = await db.find({username});
+	const existingUser = await db.users.find({username});
 	if (existingUser.length === 0) {
 		if (req.user.role === 'admin') {
 			bcrypt.hash(password, 10, async (error, hashedPassword) => {
@@ -32,7 +32,6 @@ exports.loginUser = async (req, res) => {
 			if(!result) {
 				res.json('wrong password');
 			} else {
-				console.log(user);
 				const token = jwt.sign(user[0], secret);
 				res.json(
 					{ 

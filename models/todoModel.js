@@ -4,7 +4,18 @@ module.exports = {
 	getItems: () => {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const doc = await db.find({});
+				const doc = await db.items.find({});
+				resolve(doc);
+			} catch (error) {
+				reject(error);
+			}
+		});
+	},
+
+	getItem: (id) => {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const doc = await db.items.findOne({_id: id});
 				resolve(doc);
 			} catch (error) {
 				reject(error);
@@ -15,7 +26,7 @@ module.exports = {
 	createItem: (title, done, date) => {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const doc = await db.insert({
+				const doc = await db.items.insert({
 					title: title,
 					done: done,
 					created: date
@@ -28,10 +39,9 @@ module.exports = {
 	},
 
 	updateItem: (id, title, done, date) => {
-		console.log(title);
 		return new Promise(async (resolve, reject) => {
 			try {
-				const doc = await db.update(
+				const doc = await db.items.update(
 					{
 						_id: id
 					}, {
@@ -50,7 +60,7 @@ module.exports = {
 	deleteItem: (id) => {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const doc = await db.remove({
+				const doc = await db.items.remove({
 					_id: id
 				});
 				resolve(doc);

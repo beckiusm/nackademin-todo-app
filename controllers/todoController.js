@@ -10,10 +10,19 @@ exports.getItems = async (req, res) => {
 	}
 };
 
+exports.getItem = async (req, res) => {
+	const id = req.params.id;
+	try {
+		const item = await todoModel.getItem(id);
+		res.json(item);
+	} catch (error) {
+		res.json({ error: error.message });
+	}
+};
+
 exports.createItem = async (req, res) => {
 	const { title, done } = req.body;
 	const date = moment().format();
-	console.log(date);
 	try {
 		const item = await todoModel.createItem(title, done, date);
 		res.json(item);
