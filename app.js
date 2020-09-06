@@ -13,8 +13,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // router
-const router = require('./routes/router');
-app.use('/api', router);
+const listRouter = require('./routes/lists');
+const itemRouter = require('./routes/items');
+const userRouter = require('./routes/users');
+app.use('/api/lists', listRouter);
+app.use('/api/items', itemRouter);
+app.use('/api/users', userRouter);
 
 // view engine
 app.set('views', path.join(__dirname, '/views'));

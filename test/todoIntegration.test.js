@@ -39,5 +39,5 @@ describe('list integration test', () => {
 				res.should.be.json;
 				res.body.should.have.keys(['title', 'userID', '_id']);
 			});
-	}); 
+	});
 });
