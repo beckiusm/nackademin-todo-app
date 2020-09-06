@@ -28,6 +28,7 @@ router.post('/users', auth.auth, userController.createUser);
 // login user
 router.post('/auth', userController.loginUser);
 
-router.get('/lists/:id', listController.getList);
+router.get('/lists/:id', auth.auth, listController.getList);
+router.post('/lists', auth.auth, listController.createList);
 
 module.exports = router;

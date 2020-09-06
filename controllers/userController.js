@@ -6,7 +6,7 @@ exports.createUser = async (req, res) => {
 		await userModel.createUser(username, password);
 		res.json('Created user succesfully').status(200);
 	} catch (error) {
-		res.json({ error: error.message });
+		res.json({ error: error.message }).status(400);
 	}
 };
 
@@ -21,7 +21,7 @@ exports.loginUser = async (req, res) => {
 			}
 		).status(200); 
 	} catch (error) {
-		res.json({ error: 'username not found' });
+		res.json({ error: 'username not found' }).status(400);
 	}
 };
 

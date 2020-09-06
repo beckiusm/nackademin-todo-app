@@ -18,7 +18,7 @@ module.exports = {
 		});
 	},
 
-	loginUser: function (username, password) {
+	loginUser: function (username, password, role = 'user') {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const user = await db.users.findOne({username: username});

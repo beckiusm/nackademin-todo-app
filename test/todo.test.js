@@ -1,4 +1,3 @@
-const express = require('express')();
 const chai = require('chai');
 chai.should();
 const db = require('../database/db').db;
@@ -19,9 +18,9 @@ function randBool() {
 
 describe('todo model tests', () => {
 	beforeEach(async function () {
-		await db.users.remove({});
-		await db.items.remove({});
-		await db.lists.remove({});
+		await db.users.remove({}, {multi: true});
+		await db.items.remove({}, {multi: true});
+		await db.lists.remove({}, {multi: true});
 		this.currentTest.user = await userModel.createUser(randString(), randString());
 	});
 	it('should create a todolist', async function () {
