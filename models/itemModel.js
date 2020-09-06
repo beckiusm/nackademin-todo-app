@@ -1,4 +1,4 @@
-const db = require('../app').db;
+const db = require('../database/db').db;
 
 module.exports = {
 	getItems: () => {
@@ -23,13 +23,14 @@ module.exports = {
 		});
 	},
 
-	createItem: (title, done, date) => {
+	createItem: (title, done, date, listID) => {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const doc = await db.items.insert({
 					title: title,
 					done: done,
-					created: date
+					created: date,
+					listID: listID
 				});
 				resolve(doc);
 			} catch (error) {
@@ -37,6 +38,7 @@ module.exports = {
 			}
 		});
 	},
+
 
 	updateItem: (id, title, done, date) => {
 		return new Promise(async (resolve, reject) => {

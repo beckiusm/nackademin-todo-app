@@ -1,29 +1,39 @@
-const db = require('../app').db;
+const db = require('../database/db').db;
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const secret = process.env.SECRET;
+
 
 module.exports = {
 	createUser: function (username, password) {
 		return new Promise(async (resolve, reject) => {
-			try {
-				const existingUser = await db.users.find({username});
-				if (existingUser.length === 0) {
-					const doc = await db.users.insert({username, password, role: 'user'});
+			bcrypt.hash(password, 10, async (err, hashedPassword) => {
+				try {
+					const doc = await db.users.insert({username, password: hashedPassword});
 					resolve(doc);
-				} else {
-					throw new Error('Username already exists');
+				} catch (error) {
+					reject(error);
 				}
-			} catch (error) {
-				reject(error);
-			}
+			});
 		});
 	},
-	loginUser: function (username) {
+
+	loginUser: function (username, password) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const doc = await db.users.find({username: username});
-				resolve(doc);
+				const user = await db.users.findOne({username: username});
+				bcrypt.compare(password, user.password, (err, result) => {
+					if(!result) {
+						return false;
+					} else {
+						const token = jwt.sign(user, secret);
+						resolve(token);
+					}
+				});
 			} catch (error) {
 				reject(error);
 			}
 		});
 	}
+
 };

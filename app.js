@@ -3,19 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const request = require('request');
 const path = require('path');
-const port = 3000;
 const moment = require('moment');
-
-// run server
-app.listen(port, () => console.log(`Running app on port ${port}`));
-
-// db
-const Datastore = require('nedb-promise');
-const db = {};
-db.items = new Datastore({ filename: './database/items.db', autoload: true }); 
-db.users = new Datastore({ filename: './database/users.db', autoload: true });
-
-exports.db = db;
 
 // serve static files
 app.use('/', express.static('public'));
@@ -41,3 +29,5 @@ app.get('/', (req, res) => {
 	});
 	
 });
+
+module.exports = app;

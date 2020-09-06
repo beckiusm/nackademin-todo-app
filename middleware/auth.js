@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const secret = 'random123';
+const secret = process.env.SECRET;
 
 function auth (req, res, next) {
 	if (!req.headers.authorization) {
