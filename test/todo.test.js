@@ -27,8 +27,10 @@ describe('todo model tests', () => {
 		// arrange
 		const user = this.test.user;
 		// act
-		const todoList = await listModel.createList(randString(), user._id);
+		const title = randString();
+		const todoList = await listModel.createList(title, user._id);
 		// assert
+		todoList.title.should.equal(title);
 		todoList.should.have.keys(['title', 'userID', '_id']);
 	});
 	it('should return all lists', async function () {

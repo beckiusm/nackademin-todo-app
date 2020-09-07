@@ -43,7 +43,7 @@ describe('list integration test', () => {
 				res.body.should.have.keys(['title', 'userID', '_id']);
 			});
 	});
-	it('should get list', async function () {
+	it('should get list and its items', async function () {
 		const list = await listModel.createList(randString(), this.test.user._id);
 		request(app)
 			.get(`/api/lists/${list._id}`)
