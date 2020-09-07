@@ -21,11 +21,10 @@ exports.getItem = async (req, res) => {
 };
 
 exports.createItem = async (req, res) => {
-	const { title, done } = req.body;
-	const userID = req.user._id;
+	const { title, done, listID } = req.body;
 	const date = moment().format();
 	try {
-		const item = await itemModel.createItem(title, done, date, userID);
+		const item = await itemModel.createItem(title, done, date, listID);
 		res.json(item).status(201);
 	} catch (error) {
 		res.json({ error: error.message }).status(400);

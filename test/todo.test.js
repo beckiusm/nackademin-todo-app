@@ -72,9 +72,14 @@ describe('todo model tests', () => {
 		// arrange
 		const user = this.test.user;
 		const todoList = await listModel.createList(randString(), user._id);
+		for (let i = randNumber(); i < 10; i++) {
+			await itemModel.createItem(randString(), randBool(), moment().format(), todoList._id);
+		}
+		const list = await listModel.getList(todoList._id);
 		// act
 		const deletedList = await listModel.deleteList(todoList._id);
 		// assert
-		deletedList.should.equal(1);
+		deletedList.list.should.equal(1);
+		deletedList.items.should.equal(list.items.length);
 	});
 });

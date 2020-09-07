@@ -5,11 +5,11 @@ const secret = process.env.SECRET;
 
 
 module.exports = {
-	createUser: function (username, password) {
+	createUser: function (username, password, role = 'user') {
 		return new Promise(async (resolve, reject) => {
 			bcrypt.hash(password, 10, async (err, hashedPassword) => {
 				try {
-					const doc = await db.users.insert({username, password: hashedPassword});
+					const doc = await db.users.insert({username, password: hashedPassword, role});
 					resolve(doc);
 				} catch (error) {
 					reject(error);
@@ -18,7 +18,7 @@ module.exports = {
 		});
 	},
 
-	loginUser: function (username, password, role = 'user') {
+	loginUser: function (username, password) {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const user = await db.users.findOne({username: username});

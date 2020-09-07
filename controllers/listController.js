@@ -1,8 +1,9 @@
 const listModel = require('../models/listModel');
 
 exports.getLists = async (req, res) => {
+	const userID = req.user._id;
 	try {
-		const lists = await listModel.getLists();
+		const lists = await listModel.getLists(userID);
 		res.json(lists).status(200);
 	} catch (error) {
 		res.json({ error: error.message }).status(400);
@@ -38,7 +39,7 @@ exports.updateList = async (req, res) => {
 		res.json(
 			{
 				message: `Updated ${list} lists with id ${id}.`,
-				list: { title, id}
+				list: { title, id }
 			}).status(200);
 	} catch (error) {
 		res.json({ error: error.message });
@@ -49,8 +50,8 @@ exports.deleteList = async (req, res) => {
 	if (req.user.role === 'admin') {
 		const id = req.params.id;
 		try {
-			const list = await listModel.deletelist(id);
-			res.json({ message: `Delete ${list} lists with id ${id}.` }).status(200);
+			const result = await listModel.deleteList(id);
+			res.json({ message: `Deleted ${result.list} lists and ${result.items} item with list id ${id}.` }).status(200);
 		} catch (error) {
 			res.json({ error: error.message }).status(400);
 		}

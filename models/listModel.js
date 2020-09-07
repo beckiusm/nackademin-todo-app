@@ -71,7 +71,10 @@ module.exports = {
 				const list = await db.lists.remove({
 					_id: id
 				});
-				resolve(list);
+				const items = await db.items.remove({
+					listID: id
+				}, {multi: true});
+				resolve({list, items});
 			} catch (error) {
 				reject(error);
 			}
