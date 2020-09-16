@@ -38,7 +38,7 @@ describe('list integration test', () => {
 			.set('Content-Type', 'application/json')
 			.send(fields)
 			.end((err, res) => {
-				res.should.have.status(200);
+				res.should.have.status(201);
 				res.should.be.json;
 				res.body.should.have.keys(['title', 'userID', '_id']);
 			});

@@ -25,7 +25,7 @@ exports.createItem = async (req, res) => {
 	const date = moment().format();
 	try {
 		const item = await itemModel.createItem(title, done, date, listID);
-		res.json(item).status(201);
+		res.status(201).json(item);
 	} catch (error) {
 		res.json({ error: error.message }).status(400);
 	}

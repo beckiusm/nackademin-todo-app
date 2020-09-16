@@ -25,7 +25,7 @@ exports.createList = async (req, res) => {
 	const userID = req.user._id;
 	try {
 		const list = await listModel.createList(title, userID);
-		res.json(list).status(201);
+		res.status(201).json(list);
 	} catch (error) {
 		res.json({ error: error.message }).status(400);
 	}
