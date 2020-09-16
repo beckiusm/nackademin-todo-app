@@ -1,18 +1,44 @@
+
+const mongoose = require('mongoose');
 require('dotenv').config();
-const Datastore = require('nedb-promise');
-const db = {};
+
+let mongoDatabase;
 
 switch (process.env.ENVIRONMENT) {
-case 'dev':
-	db.items = new Datastore({ filename: __dirname + '/items.db', autoload: true });
-	db.lists = new Datastore({ filename: __dirname + '/lists.db', autoload: true });
-	db.users = new Datastore({ filename: __dirname + '/users.db', autoload: true });
-	break;
+case 'development':
 case 'test':
-	db.items = new Datastore({ filename: __dirname + '/testItems.db', autoload: true });
-	db.lists = new Datastore({ filename: __dirname + '/testLists.db', autoload: true });
-	db.users = new Datastore({ filename: __dirname + '/testUsers.db', autoload: true });
+	const {MongoMemoryServer} = require('mongodb-memory-server');
+	mongoDatabase = new MongoMemoryServer();
+	break;
+case 'production':
+case 'staging':
+	mongoDatabase = {
+		// mongodb+srv://user:password@host/dbname
+		getUri: async () => 
+			'localhost:27017/todo'
+	};
 	break;
 }
 
-exports.db = db;
+async function connect(){
+    
+	let uri = await mongoDatabase.getUri();
+
+	await mongoose.connect(uri, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+		useFindAndModify: false,
+		useCreateIndex: true
+	});
+}
+
+async function disconnect(){
+	if(process.env.ENVIRONMENT == 'test' || process.env.ENVIRONMENT == 'development'){
+		await mongoDatabase.stop();
+	}
+	await mongoose.disconnect();
+}
+
+module.exports = {
+	connect, disconnect
+};

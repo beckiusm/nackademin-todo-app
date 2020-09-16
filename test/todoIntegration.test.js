@@ -40,7 +40,7 @@ describe('list integration test', () => {
 			.end((err, res) => {
 				res.should.have.status(201);
 				res.should.be.json;
-				res.body.should.have.keys(['title', 'userID', '_id']);
+				res.body.should.have.keys(['title', 'userID', '_id', '__v']);
 			});
 	});
 	it('should get list and its items', async function () {
@@ -52,7 +52,7 @@ describe('list integration test', () => {
 			.end((err, res) => {
 				res.should.have.status(200);
 				res.should.be.json;
-				res.body.should.have.keys(['items', 'list']);
+				res.body.should.have.keys(['items', 'list', '__v']);
 			});
 	});
 	it('should get all lists', async function () {
@@ -82,7 +82,7 @@ describe('list integration test', () => {
 			.end((err, res) => {
 				res.should.have.status(200);
 				res.should.be.json;
-				res.body.should.have.keys(['message', 'list']);
+				res.body.should.have.keys(['message', 'list', '__v']);
 			});
 	});
 	it('should delete list', async function () {
@@ -94,7 +94,7 @@ describe('list integration test', () => {
 			.end((err, res) => {
 				res.should.have.status(200);
 				res.should.be.json;
-				res.body.should.have.keys(['message']);
+				res.body.should.have.keys(['message', '__v']);
 			});
 	});
 });

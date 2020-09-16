@@ -1,39 +1,45 @@
-const db = require('../database/db').db;
+const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 const secret = process.env.SECRET;
 
+const userSchema = new mongoose.Schema({
+	username: {type: String, unique: true },
+	password: String
+});
+
+const User = mongoose.model('User', userSchema);
 
 module.exports = {
-	createUser: function (username, password, role = 'user') {
-		return new Promise(async (resolve, reject) => {
-			bcrypt.hash(password, 10, async (err, hashedPassword) => {
-				try {
-					const doc = await db.users.insert({username, password: hashedPassword, role});
-					resolve(doc);
-				} catch (error) {
-					reject(error);
-				}
-			});
-		});
+	createUser: async function (username, password, role = 'user') {
+		const hashedPassword = bcrypt.hashSync(password, 10);
+		try {
+			const user = await User.create({username, password: hashedPassword, role});
+			return user._doc;
+		} catch (error) {
+			return (error);
+		}
 	},
 
-	loginUser: function (username, password) {
-		return new Promise(async (resolve, reject) => {
-			try {
-				const user = await db.users.findOne({username: username});
-				bcrypt.compare(password, user.password, (err, result) => {
-					if(!result) {
-						return false;
-					} else {
-						const token = jwt.sign(user, secret);
-						resolve(token);
-					}
-				});
-			} catch (error) {
-				reject(error);
-			}
-		});
-	}
+	loginUser: async function (username, password) {
+		try {
+			const user = await User.findOne({username: username}).exec()._doc;
+			bcrypt.compare(password, user.password, (err, result) => {
+				if(!result) {
+					return false;
+				} else {
+					const token = jwt.sign(user, secret);
+					return token;
+				}
+			});
+		} catch (error) {
+			return (error);
+		}
+	},
+	
+	clear: async () => {
+		return await User.deleteMany({});
+	},
 
 };

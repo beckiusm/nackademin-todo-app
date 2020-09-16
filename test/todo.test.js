@@ -1,6 +1,6 @@
 const chai = require('chai');
 chai.should();
-const db = require('../database/db').db;
+const db = require('../database/db');
 const userModel = require('../models/userModel');
 const listModel = require('../models/listModel');
 const itemModel = require('../models/itemModel');
@@ -17,11 +17,18 @@ function randBool() {
 }
 
 describe('todo model tests', () => {
+	before( async function () {
+		await db.connect();
+	});
+	after( async function () {
+		await db.disconnect();
+	});
 	beforeEach(async function () {
-		await db.users.remove({}, {multi: true});
-		await db.items.remove({}, {multi: true});
-		await db.lists.remove({}, {multi: true});
+		await userModel.clear();
+		await itemModel.clear();
+		await listModel.clear();
 		this.currentTest.user = await userModel.createUser(randString(), randString());
+		//console.log(this.currentTest.user);
 	});
 	it('should create a todolist', async function () {
 		// arrange
@@ -31,11 +38,12 @@ describe('todo model tests', () => {
 		const todoList = await listModel.createList(title, user._id);
 		// assert
 		todoList.title.should.equal(title);
-		todoList.should.have.keys(['title', 'userID', '_id']);
+		todoList.should.have.keys(['title', 'userID', '_id', '__v']);
 	});
 	it('should return all lists', async function () {
 		// arrange 
 		const user = this.test.user;
+
 		for (let i = randNumber(); i < 10; i++) {
 			await listModel.createList(randString(), user._id);
 		}
@@ -43,7 +51,7 @@ describe('todo model tests', () => {
 		const todoLists = await listModel.getLists(user._id);
 		// assert
 		todoLists.should.be.an('array');
-		todoLists[0].should.have.keys(['title', 'userID', '_id']);
+		todoLists[0]._doc.should.have.keys(['title', 'userID', '_id', '__v']);
 	});
 	it('should return list and items', async function () {
 		// arrange 
@@ -57,7 +65,7 @@ describe('todo model tests', () => {
 		// assert
 		todoList.should.have.keys(['list', 'items']);
 		todoList.items.should.be.an('array');
-		todoList.items[0].should.have.keys(['title', 'done', 'created', 'listID', '_id']);
+		todoList.items[0]._doc.should.have.keys(['title', 'done', 'created', 'listID', '_id', '__v']);
 	});
 	it('should update a todolist', async function () {
 		// arrange
@@ -68,7 +76,7 @@ describe('todo model tests', () => {
 		await listModel.updateList(todoList._id, newTitle);
 		// assert
 		const updatedList = await listModel.getList(todoList._id);
-		updatedList.list.title.should.equal(newTitle);
+		updatedList.list[0].title.should.equal(newTitle);
 	});
 	it('should delete a todolist', async function () {
 		// arrange
@@ -83,10 +91,5 @@ describe('todo model tests', () => {
 		// assert
 		deletedList.list.should.equal(1);
 		deletedList.items.should.equal(list.items.length);
-	});
-	it('should test', () => {
-		let test = true;
-		test.should.equal(true);
-		test.should.equal(true);
 	});
 });

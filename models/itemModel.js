@@ -1,74 +1,87 @@
-const db = require('../database/db').db;
+const mongoose = require('mongoose');
+
+const itemSchema = new mongoose.Schema({
+	title: String,
+	done: Boolean,
+	created: Date,
+	listID: String
+});
+
+const Item = mongoose.model('Item', itemSchema);
 
 module.exports = {
-	getItems: () => {
-		return new Promise(async (resolve, reject) => {
-			try {
-				const doc = await db.items.find({});
-				resolve(doc);
-			} catch (error) {
-				reject(error);
-			}
-		});
+	getItems: async () => {
+		try {
+			return await Item.find({});
+		} catch (error) {
+			return(error);
+		}
 	},
 
-	getItem: (id) => {
-		return new Promise(async (resolve, reject) => {
-			try {
-				const doc = await db.items.findOne({_id: id});
-				resolve(doc);
-			} catch (error) {
-				reject(error);
-			}
-		});
+	getItemsFromList: async (id) => {
+		try {
+			return await Item.find({listID: id});
+		} catch (error) {
+			return(error);
+		}
 	},
 
-	createItem: (title, done, date, listID) => {
-		return new Promise(async (resolve, reject) => {
-			try {
-				const doc = await db.items.insert({
+	getItem: async (id) => {
+		try {
+			return await Item.findOne({_id: id});
+		} catch (error) {
+			return (error);
+		}
+	},
+
+	createItem: async (title, done, date, listID) => {
+		try {
+			const item = Item.create({
+				title: title,
+				done: done,
+				created: date,
+				listID: listID
+			});
+			return item._doc;
+		} catch (error) {
+			return (error);
+		}
+	},
+
+
+	updateItem: async (id, title, done, date) => {
+		try {
+			return await Item.findByIdAndUpdate(
+				id, 
+				{
 					title: title,
 					done: done,
-					created: date,
-					listID: listID
-				});
-				resolve(doc);
-			} catch (error) {
-				reject(error);
-			}
-		});
+					updated: date
+				}, 
+				{new: true}
+			);
+		} catch (error) {
+			return (error);
+		}
 	},
 
-
-	updateItem: (id, title, done, date) => {
-		return new Promise(async (resolve, reject) => {
-			try {
-				const doc = await db.items.update(
-					{
-						_id: id
-					}, {
-						$set: {
-							title: title,
-							done: done,
-							updated: date
-						}
-					}); resolve(doc);
-			} catch (error) {
-				reject(error);
-			}
-		});
+	deleteItem: async (id) => {
+		try {
+			return await Item.deleteOne({_id: id});
+		} catch (error) {
+			return (error);
+		}
 	},
 
-	deleteItem: (id) => {
-		return new Promise(async (resolve, reject) => {
-			try {
-				const doc = await db.items.remove({
-					_id: id
-				});
-				resolve(doc);
-			} catch (error) {
-				reject(error);
-			}
-		});
-	}
+	deleteAllItems: async (listID) => {
+		try {
+			return await (await Item.deleteMany({listID: listID})).deletedCount;
+		} catch (error) {
+			return (error);
+		}
+	},
+
+	clear: async () => {
+		return await Item.deleteMany({});
+	},
 };
