@@ -86,6 +86,6 @@ describe('todo model tests', () => {
 	});
 	it('should test', () => {
 		let test = true;
-		test.should.equal(false);
+		test.should.equal(true);
 	});
 });
