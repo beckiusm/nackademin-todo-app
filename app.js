@@ -12,6 +12,8 @@ app.use('/', express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+let test = test;
+
 // router
 const listRouter = require('./routes/lists');
 const itemRouter = require('./routes/items');
