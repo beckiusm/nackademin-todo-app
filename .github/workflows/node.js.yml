@@ -27,6 +27,6 @@ jobs:
     - run: npm ci
     - run: npm test
     env:
-      port: 3000
-      secret: lol123
-      environment: test
+      PORT: 3000
+      SECRET: lol123
+      ENVIRONMENT: test
