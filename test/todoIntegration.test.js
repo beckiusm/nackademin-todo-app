@@ -3,9 +3,10 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 chai.should();
-const db = require('../database/db').db;
+const db = require('../database/db');
 const userModel = require('../models/userModel');
-const listModel = require('../models/listModel.js');
+const listModel = require('../models/listModel');
+const itemModel = require('../models/itemModel');
 const { request } = chai;
 
 function randString(string = '') {
@@ -19,10 +20,16 @@ function randBool() {
 }
 
 describe('list integration test', () => {
+	before( async function () {
+		await db.connect();
+	});
+	after( async function () {
+		await db.disconnect();
+	});
 	beforeEach(async function () {
-		await db.users.remove({}, {multi: true});
-		await db.items.remove({}, {multi: true});
-		await db.lists.remove({}, {multi: true});
+		await userModel.clear();
+		await itemModel.clear();
+		await listModel.clear();
 		const uname = randString();
 		const pword = randString();
 		this.currentTest.user = await userModel.createUser(uname, pword);
@@ -52,7 +59,7 @@ describe('list integration test', () => {
 			.end((err, res) => {
 				res.should.have.status(200);
 				res.should.be.json;
-				res.body.should.have.keys(['items', 'list', '__v']);
+				res.body.should.have.keys(['items', 'list']);
 			});
 	});
 	it('should get all lists', async function () {
@@ -82,7 +89,7 @@ describe('list integration test', () => {
 			.end((err, res) => {
 				res.should.have.status(200);
 				res.should.be.json;
-				res.body.should.have.keys(['message', 'list', '__v']);
+				res.body.should.have.keys(['message', 'list']);
 			});
 	});
 	it('should delete list', async function () {
@@ -94,7 +101,7 @@ describe('list integration test', () => {
 			.end((err, res) => {
 				res.should.have.status(200);
 				res.should.be.json;
-				res.body.should.have.keys(['message', '__v']);
+				res.body.should.have.keys(['message']);
 			});
 	});
 });

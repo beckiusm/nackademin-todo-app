@@ -4,7 +4,7 @@ const userController = require('../controllers/userController.js');
 const auth = require('../middleware/auth.js');
 
 // create user
-router.post('/register', auth.auth, userController.createUser);
+router.post('/register', userController.createUser);
 
 // login user
 router.post('/auth', userController.loginUser);
