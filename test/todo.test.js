@@ -5,6 +5,7 @@ const userModel = require('../models/userModel');
 const listModel = require('../models/listModel');
 const itemModel = require('../models/itemModel');
 const moment = require('moment');
+const mongoose = require('mongoose');
 
 function randString(string = '') {
 	return string + Math.random().toString(20).substr(2, 6);

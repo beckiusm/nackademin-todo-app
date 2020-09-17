@@ -37,10 +37,10 @@ async function connect(){
 }
 
 async function disconnect(){
+	await mongoose.disconnect();
 	if(process.env.ENVIRONMENT == 'test' || process.env.ENVIRONMENT == 'development'){
 		await mongoDatabase.stop();
 	}
-	await mongoose.disconnect();
 }
 
 module.exports = {
