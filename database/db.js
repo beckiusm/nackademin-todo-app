@@ -13,13 +13,13 @@ case 'test':
 case 'production':
 	mongoDatabase = {
 		getUri: async () => 
-			`${db}/todo`
+			`${db}/todo?retryWrites=true&w=majority`
 	};
 	break;
 case 'staging':
 	mongoDatabase = {
 		getUri: async () => 
-			`${db}/todoStage`
+			`${db}/todoStage?retryWrites=true&w=majority`
 	};
 	break;
 }
