@@ -10,8 +10,7 @@ on:
     branches: [ release ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -32,11 +31,13 @@ jobs:
       ENVIRONMENT: test
       
   deploy:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
         with:
+          branch: release
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "rocky-badlands-09287" #Must be unique in Heroku
           heroku_email: "lillmatte@hotmail.com"
