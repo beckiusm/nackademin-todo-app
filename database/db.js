@@ -10,7 +10,7 @@ case 'test':
 	const {MongoMemoryServer} = require('mongodb-memory-server');
 	mongoDatabase = new MongoMemoryServer();
 	break;
-case 'release':
+case 'production':
 	mongoDatabase = {
 		getUri: async () => 
 			`${db}/todo`
@@ -23,8 +23,6 @@ case 'staging':
 	};
 	break;
 }
-
-let a = a;
 
 async function connect(){
     
