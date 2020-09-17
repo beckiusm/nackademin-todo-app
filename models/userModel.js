@@ -14,7 +14,7 @@ const User = mongoose.model('User', userSchema);
 
 module.exports = {
 	createUser: async function (username, password, role = 'user') {
-		const hashedPassword = bcrypt.hashSync(password, 10);
+		const hashedPassword = await bcrypt.hashSync(password, 10);
 		try {
 			const user = await User.create({username, password: hashedPassword, role});
 			return user._doc;
