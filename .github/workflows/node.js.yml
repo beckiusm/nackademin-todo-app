@@ -19,4 +19,3 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "todo-release" #Must be unique in Heroku
           heroku_email: "lillmatte@hotmail.com"
-          branch: "release"

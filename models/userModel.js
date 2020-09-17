@@ -18,6 +18,7 @@ module.exports = {
 		try {
 			const user = await User.create({username, password: hashedPassword, role});
 			return user._doc;
+
 		} catch (error) {
 			return (error);
 		}
