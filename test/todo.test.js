@@ -92,4 +92,8 @@ describe('todo model tests', () => {
 		deletedList.list.should.equal(1);
 		deletedList.items.should.equal(list.items.length);
 	});
+	it('test', () => {
+		let test = true;
+		test.should.equal(true);
+	});
 });
