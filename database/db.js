@@ -24,6 +24,8 @@ case 'staging':
 	break;
 }
 
+let a = a;
+
 async function connect(){
     
 	let uri = await mongoDatabase.getUri();
