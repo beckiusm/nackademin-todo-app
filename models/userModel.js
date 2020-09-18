@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const secret = process.env.SECRET;
+const listModel = require('../models/listModel');
+const itemModel = require('../models/itemModel');
 
 const userSchema = new mongoose.Schema({
 	username: {type: String, unique: true },
@@ -36,6 +38,29 @@ module.exports = {
 			}
 		} catch (error) {
 			return (error);
+		}
+	},
+
+	deleteUser: async function (id) {
+		try {
+			const user = await (await User.deleteOne({_id: id})).deletedCount;
+			const list = await listModel.deleteUserLists(id);
+			return ({user, list});
+		} catch (error) {
+			return (error);
+		}
+	},
+
+	getUserInfo: async function (id) {
+		try {
+			const list = await listModel.getLists(id);
+			let userInfo = [];
+			for (let i = 0; i < list.length; i++) {
+				userInfo.push(await listModel.getList(list[i]._id));
+			}
+			return userInfo;
+		} catch (error) {
+			return error;
 		}
 	},
 	

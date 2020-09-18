@@ -60,6 +60,21 @@ module.exports = {
 		}
 	},
 
+	deleteUserLists: async (id) => {
+		try {
+			const lists = await List.find({userID: id});
+			let itemsDeleted = 0;
+			for(let i = 0; i < lists.length; i++) {
+				let items = await itemModel.deleteAllItems(lists[i]._id);
+				itemsDeleted += items;
+			}
+			const list = (await List.deleteMany({userID: id})).deletedCount;
+			return ({list, items: itemsDeleted});
+		} catch (error) {
+			return error;
+		}
+	},
+
 	clear: async () => {
 		return await List.deleteMany({});
 	},

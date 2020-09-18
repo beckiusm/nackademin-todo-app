@@ -29,7 +29,6 @@ describe('todo model tests', () => {
 		await itemModel.clear();
 		await listModel.clear();
 		this.currentTest.user = await userModel.createUser(randString(), randString());
-		//console.log(this.currentTest.user);
 	});
 	it('should create a todolist', async function () {
 		// arrange
